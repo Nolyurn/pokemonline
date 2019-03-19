@@ -45,20 +45,22 @@ io.on('connection', function(socket){
 	socket.emit('display', {'map': determinerMapUtilisateur(users[socket.id].x, users[socket.id].y),'player':users[socket.id], 'personnages': obtenirPersonnagesAffichables(socket.id)});
 	socket.on('input', function(key) {
 		let clientId = socket.client.conn['id'];
+		let moveSuccessful = false;
 		if(key === 'ArrowUp') {
-			movePlayer(clientId, 'up');
+			moveSuccessful = movePlayer(clientId, 'up');
 		}
 		if(key === 'ArrowDown') {
-			movePlayer(clientId, 'down');
+			moveSuccessful = movePlayer(clientId, 'down');
 		}
 		if(key === 'ArrowLeft') {
-			movePlayer(clientId, 'left');
+			moveSuccessful = movePlayer(clientId, 'left');
 		}
 		if(key === 'ArrowRight') {
-			movePlayer(clientId, 'right');
+			moveSuccessful = movePlayer(clientId, 'right');
 		}
 		socket.emit('display', {'map': determinerMapUtilisateur(users[socket.id].x, users[socket.id].y),'player':users[socket.id], 'personnages': obtenirPersonnagesAffichables(socket.id)});
 
+		// Se faire afficher auprès des autres joueurs à portée de vue
 		for(let clientId of obtenirClientIdPersonnagesAffichables(socket.id)){
 			io.to(clientId).emit('display', {'map': determinerMapUtilisateur(users[clientId].x, users[clientId].y),'player':users[clientId], 'personnages': obtenirPersonnagesAffichables(clientId)});
 		}
@@ -113,33 +115,38 @@ function determinerMapUtilisateur(x , y) {
 }
 
 function movePlayer(clientId, destination) {
+	let moveSuccessful;
 	let destinationX;
 	let destinationY;
 	switch (destination) {
 		case 'up':
 			destinationY = users[clientId].y - 1;
-			if(movePossible(users[clientId].x, destinationY)) {	
+			moveSuccessful = movePossible(users[clientId].x, destinationY);
+			if(moveSuccessful) {	
 				users[clientId].y = destinationY;
 			}
 			users[clientId].direction = 'N'
 			break;
 		case 'down':
 			destinationY = users[clientId].y + 1;
-			if(movePossible(users[clientId].x, destinationY)) {
+			moveSuccessful = movePossible(users[clientId].x, destinationY);
+			if(moveSuccessful) {
 				users[clientId].y = destinationY;
 			}
 			users[clientId].direction = 'S'
 			break;
 		case 'left':
 			destinationX = users[clientId].x - 1;
-			if(movePossible(destinationX, users[clientId].y)) {
+			moveSuccessful = movePossible(destinationX, users[clientId].y)
+			if(moveSuccessful) {
 				users[clientId].x = destinationX;
 			}
 			users[clientId].direction = 'O'
 			break;
 		case 'right':
 			destinationX = users[clientId].x + 1;
-			if(movePossible(destinationX, users[clientId].y)) {
+			moveSuccessful = movePossible(destinationX, users[clientId].y);
+			if(moveSuccessful) {
 				users[clientId].x = destinationX;
 			}
 			users[clientId].direction = 'O'
@@ -149,6 +156,7 @@ function movePlayer(clientId, destination) {
 		// checkChangeMap
 		// checkPokemon
 	}	
+	return moveSuccessful;
 }
 
 function movePossible(x, y) {
