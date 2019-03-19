@@ -47,6 +47,10 @@ io.on('connection', function(socket){
 			io.to(clientId).emit('display', {'map': determinerMapUtilisateur(users[clientId].x, users[clientId].y),'player':users[clientId], 'personnages': obtenirPersonnagesAffichables(clientId)});
 		}
 	});
+
+	socket.on('disconnect', function(socket){
+		delete users[socket.id];
+	});
 });
 
 function obtenirPersonnagesAffichables(clientId){
