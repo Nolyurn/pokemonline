@@ -46,6 +46,8 @@ io.on('connection', function(socket){
 	socket.on('input', function(key) {
 		let clientId = socket.client.conn['id'];
 		let moveSuccessful = false;
+		let listeClientIdAffichableAvantDeplacement = obtenirClientIdPersonnagesAffichables(socket.id);
+
 		if(key === 'ArrowUp') {
 			moveSuccessful = movePlayer(clientId, 'up');
 		}
@@ -63,6 +65,15 @@ io.on('connection', function(socket){
 		// Se faire afficher auprès des autres joueurs à portée de vue
 		for(let clientId of obtenirClientIdPersonnagesAffichables(socket.id)){
 			io.to(clientId).emit('display', {'map': determinerMapUtilisateur(users[clientId].x, users[clientId].y),'player':users[clientId], 'personnages': obtenirPersonnagesAffichables(clientId)});
+		}
+
+		if(moveSuccessful) {
+			// Se faire désafficher des joueurs lorsque l'on sors de leur champs de vision
+			for(let clientIdAffichable of listeClientIdAffichableAvantDeplacement) {
+				if (!obtenirPersonnagesAffichables(clientIdAffichable).includes(clientIdAffichable) ) {
+					io.to(clientIdAffichable).emit('display', {'map': determinerMapUtilisateur(users[clientIdAffichable].x, users[clientIdAffichable].y),'player':users[clientIdAffichable], 'personnages': obtenirPersonnagesAffichables(clientIdAffichable)});
+				}
+			}
 		}
 	});
 
