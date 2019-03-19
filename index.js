@@ -4,18 +4,35 @@ let io = require('socket.io')(http);
 let port = process.env.PORT || 3000;
 
 let map = [
-	['ground','ground','ground','ground','ground','ground','ground','grass','grass','grass', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['grass','grass','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','grass','grass','grass', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','grass','grass','grass', 'ground'],
-	['ground','ground','ground','ground','ground','ground','ground','grass','grass','grass', 'ground'],
+	['ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','ground','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','rock','rock','rock','rock','rock','rock', 'rock','rock','rock','rock','rock','rock','rock','ground','ground','ground','ground', 'ground'],
+	['grass','grass','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','rock','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['grass','grass','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','rock','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['grass','grass','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','rock','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','rock','rock','rock','rock','rock','rock', 'rock','rock','rock','rock','rock','rock','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','ground','ground','ground', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
+	['ground','ground','ground','rock','ground','ground','ground','grass','grass','grass', 'ground', 'ground','ground','ground','ground','ground','rock','ground','ground','ground','ground', 'ground'],
 ];
 
 let users = {};
@@ -43,7 +60,6 @@ io.on('connection', function(socket){
 		socket.emit('display', {'map': determinerMapUtilisateur(users[socket.id].x, users[socket.id].y),'player':users[socket.id], 'personnages': obtenirPersonnagesAffichables(socket.id)});
 
 		for(let clientId of obtenirClientIdPersonnagesAffichables(socket.id)){
-			console.log(socket.id, clientId);
 			io.to(clientId).emit('display', {'map': determinerMapUtilisateur(users[clientId].x, users[clientId].y),'player':users[clientId], 'personnages': obtenirPersonnagesAffichables(clientId)});
 		}
 	});
@@ -97,36 +113,49 @@ function determinerMapUtilisateur(x , y) {
 }
 
 function movePlayer(clientId, destination) {
-	movedSuccessful = false;
+	let destinationX;
+	let destinationY;
 	switch (destination) {
 		case 'up':
-			// movedSuccessful = checkMove(xDestination, yDestination);
-			movedSuccessful = true;
+			destinationY = users[clientId].y - 1;
+			if(movePossible(users[clientId].x, destinationY)) {	
+				users[clientId].y = destinationY;
+			}
 			users[clientId].direction = 'N'
-			users[clientId].y--;
 			break;
 		case 'down':
-			// movedSuccessful = checkMove(xDestination, yDestination);
-			movedSuccessful = true;
+			destinationY = users[clientId].y + 1;
+			if(movePossible(users[clientId].x, destinationY)) {
+				users[clientId].y = destinationY;
+			}
 			users[clientId].direction = 'S'
-			users[clientId].y++;
 			break;
 		case 'left':
-			// movedSuccessful = checkMove(xDestination, yDestination);
-			movedSuccessful = true;
+			destinationX = users[clientId].x - 1;
+			if(movePossible(destinationX, users[clientId].y)) {
+				users[clientId].x = destinationX;
+			}
 			users[clientId].direction = 'O'
-			users[clientId].x--;
 			break;
 		case 'right':
-			// movedSuccessful = checkMove(xDestination, yDestination);
-			movedSuccessful = true;
-			users[clientId].x++;
+			destinationX = users[clientId].x + 1;
+			if(movePossible(destinationX, users[clientId].y)) {
+				users[clientId].x = destinationX;
+			}
+			users[clientId].direction = 'O'
 			break;
 
 		// checkTrainer
 		// checkChangeMap
 		// checkPokemon
 	}	
+}
+
+function movePossible(x, y) {
+	if(map[y][x] == 'rock') {
+		return false;
+	}
+	return true;
 }
 
 http.listen(port, function(){
