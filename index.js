@@ -75,8 +75,8 @@ function obtenirPersonnagesAffichables(clientId){
 		if(userId != clientId){
 			currentUser = users[clientId];
 			otherUser = users[userId];
-			if(otherUser.x >= currentUser.x-4 && otherUser.x <= currentUser.x+5 
-				&& otherUser.y >= currentUser.y-4 && otherUser.y <= currentUser.y+5 ){
+			if(otherUser.x >= currentUser.x-4 && otherUser.x < currentUser.x+5 
+				&& otherUser.y >= currentUser.y-4 && otherUser.y < currentUser.y+5 ){
 				personnagesAffichables.push(otherUser);
 			}
 		}
@@ -90,8 +90,8 @@ function obtenirClientIdPersonnagesAffichables(clientId){
 		if(userId != clientId){
 			currentUser = users[clientId];
 			otherUser = users[userId];
-			if(otherUser.x >= currentUser.x-4 && otherUser.x <= currentUser.x+5 
-				&& otherUser.y >= currentUser.y-4 && otherUser.y <= currentUser.y+5 ){
+			if(otherUser.x >= currentUser.x-4 && otherUser.x < currentUser.x+5 
+				&& otherUser.y >= currentUser.y-4 && otherUser.y < currentUser.y+5 ){
 				clientIdPersonnagesAffichables.push(userId);
 			}
 		}
