@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>	</title>
+</head>
+<body>
+	<canvas id="mapEditor" width="1000px" height="800px" style="float:left;border:1px solid black;">
+	</canvas>
+	<p>Longueur<p>
+	<input type="number" value="10" min="10"/>
+	<p>Largeur<p>
+	<input type="number" value="10" min="10"/>
+	<br/>Selected
+	<img id="selected" width="16px" height="16px"/><br/>
+	<img id="ground" onclick="onElementClick('ground')"/>
+	<img id="grass" onclick="onElementClick('grass')"/>
+	<img id="rock" onclick="onElementClick('rock')"/>
+	<button>Generate</button>
+</body>
+</html>
+<script type="text/javascript" src="displayConstante.js"></script>
+<script type="text/javascript" src="displayHandler.js"></script>
+<script type="text/javascript" src="mapEditor.js"></script>
