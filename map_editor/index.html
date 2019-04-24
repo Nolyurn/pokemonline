@@ -5,7 +5,7 @@
 	<title>	</title>
 </head>
 <body>
-	<canvas id="mapEditor" width="1000px" height="800px" style="float:left;border:1px solid black;">
+	<canvas id="mapEditor" width="1000px" height="800px" style="float:left;border:1px solid black;" onmousedown="onCanvasMouseDown(event)">
 	</canvas>
 	<p>Longueur<p>
 	<input type="number" value="10" min="10"/>
@@ -16,7 +16,9 @@
 	<img id="ground" onclick="onElementClick('ground')"/>
 	<img id="grass" onclick="onElementClick('grass')"/>
 	<img id="rock" onclick="onElementClick('rock')"/>
-	<button>Generate</button>
+	<button onclick="onModeClick('selection')">Selection</button>
+	<button onclick="onModeClick('pen')">Pen</button>
+	<button onclick="onModeClick('rectangle')">Rectangle</button>
 </body>
 </html>
 <script type="text/javascript" src="displayConstante.js"></script>

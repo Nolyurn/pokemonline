@@ -1,12 +1,16 @@
 let width;
 let height;
 let selectedElementName;
+let selectedMode;
 let map;
+
+let onCanvasDrag = false;
 
 function initialializeLayout() {
 	width = 10;
 	height = 10;
 	selectedElementName = 'ground';
+	selectedMode = 'pen'
 
 	map = [];
 	for (let i = 0; i < height; i++) {
@@ -32,7 +36,6 @@ function initialializeLayout() {
 }
 
 function initializeMapWithRock() {
-	console.log('initialize rock')
 	for(let i = 0; i < height; i++) {
 		for(let j = 0; j < width; j++) {
 			map[i][j] = 'rock';
@@ -47,7 +50,7 @@ function onWidthChange() {
 }
 
 function onHeightChange() {
-	
+
 }
 
 function onElementClick(elementName) {
@@ -56,4 +59,51 @@ function onElementClick(elementName) {
 	getPartialImage(tilesetConstante['tilesetFloor'], displayConstante[elementName].x,displayConstante[elementName].y,tileSize, tileSize).then((image) => {
 	  selectedDomImg.src = image.src;
 	});
+}
+
+function onModeClick(modeName) {
+	selectedMode = modeName;
+	console.log(selectedMode)
+}
+
+function onCanvasMouseDown(event) {
+	onCanvasDrag = true;
+	let cursorPositon = getCursorPosition(canvas, event);
+	let cursorMapPosition = getMapPositionFromCursorPosition(cursorPositon);
+
+	// coordonnees drag depart = ...
+	if(selectedMode === 'selection') {
+		// Afficher Information
+	}
+	if(selectedMode === 'pen') {
+		// Dessiner selectedElement
+		console.log(cursorMapPosition);
+		console.log(map)
+		map[cursorMapPosition.x][cursorMapPosition.y] = selectedElementName;
+		console.log(map)
+		afficherSol(); // TODO: Pour optimiser, ajouter méthode afficher tile
+	}
+}
+
+function onCanvasMouseMove(event) {
+
+}
+
+function onCanvasMouseUp(event) {
+	onCanvasDrag = false;
+	// coordonnees drag arrivés = ...
+	if(selectedMode === 'rectangle') {
+
+	}
+}
+
+function getCursorPosition(canvas, event) {
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+		return {"x":x, "y":y}
+}
+
+function getMapPositionFromCursorPosition(cursorPosition) {
+	return {"x":Math.floor(cursorPosition.x/tileSize), "y":Math.floor(cursorPosition.y/tileSize)}
 }

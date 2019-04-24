@@ -14,7 +14,7 @@ function loadImage(path) {
 function getPartialImage(image, startX, startY, width, height) {
 	let canvasPartial = document.createElement('canvas');
 	let context = canvasPartial.getContext('2d');
-	canvasPartial.width = width; 
+	canvasPartial.width = width;
 	canvasPartial.height = height;
 
 	context.drawImage(image, startX, startY, width, height,0,0,width,height);
@@ -29,19 +29,18 @@ function getPartialImage(image, startX, startY, width, height) {
 Promise.all([
 	loadImage("./tileset_floor.png"),
 ])
-.then((images) => {	
+.then((images) => {
 	tilesetConstante['tilesetFloor'] = images[0];
 
 	initialializeLayout();
 	initializeMapWithRock();
-});	
+});
 
 function drawTileOnCanvas(context,image,i,j){
 		context.drawImage(image,((i)*tileSize), ((j)*tileSize), tileSize, tileSize)
 	}
 
 function afficherSol(map){
-	console.log(map)
 	for(let i = 0; i < map[0].length; i++) {
 		for(let j = 0; j < map.length; j++) {
 			caseMap = displayConstante[map[i][j]];
